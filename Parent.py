@@ -1,6 +1,16 @@
+import sys
 import random, pygame, os
 import tkinter as tk
 from PIL import Image, ImageTk
+
+def resource_path(relative_path):
+    """ Get the correct path for PyInstaller or normal run """
+    try:
+        base_path = sys._MEIPASS  # PyInstaller temporary folder
+    except AttributeError:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class Robby:
     def __init__(self):
@@ -8,11 +18,11 @@ class Robby:
         pygame.mixer.init()
 
         # Load sounds
-        self.screamSound = pygame.mixer.Sound("sounds/scream.mp3")
-        self.walkingSound = pygame.mixer.Sound("sounds/walking.mp3")
-        self.flyingSound = pygame.mixer.Sound("sounds/dragon-flying.mp3")
-        self.transformSound = pygame.mixer.Sound("sounds/transform.mp3")
-        self.rawrSound = pygame.mixer.Sound("sounds/rawr.mp3")
+        self.screamSound = pygame.mixer.Sound(resource_path("sounds/scream.mp3"))
+        self.walkingSound = pygame.mixer.Sound(resource_path("sounds/walking.mp3"))
+        self.flyingSound = pygame.mixer.Sound(resource_path("sounds/dragon-flying.mp3"))
+        self.transformSound = pygame.mixer.Sound(resource_path("sounds/transform.mp3"))
+        self.rawrSound = pygame.mixer.Sound(resource_path("sounds/rawr.mp3"))
 
         # Initial position of Robby
         self.x, self.y = 100, 100  # Start near the top-left instead of (0,0)
@@ -26,11 +36,11 @@ class Robby:
         self.window = tk.Tk()
 
         # Load images
-        self.talkingimg = [Image.open('images/stare.png'), Image.open('images/talking.png')]
+        self.talkingimg = [Image.open(resource_path('images/stare.png')), Image.open(resource_path('images/talking.png'))]
         self.talkingimg[0] = self.talkingimg[0].convert("RGBA").resize((128, 128))
         self.talkingimg[1] = self.talkingimg[1].convert("RGBA").resize((128, 128))
-        self.dragonimg = Image.open("images/dragon.png").convert("RGBA").resize((128, 128))
-        self.folderimg = Image.open("images/foldericon.png").convert("RGBA").resize((80, 80))
+        self.dragonimg = Image.open(resource_path("images/dragon.png")).convert("RGBA").resize((128, 128))
+        self.folderimg = Image.open(resource_path("images/foldericon.png")).convert("RGBA").resize((80, 80))
 
         # Initialize image for label
         self.img_tk = ImageTk.PhotoImage(self.talkingimg[0])
@@ -51,10 +61,12 @@ class Robby:
         self.label.bind("<ButtonPress-1>", self.start_move)
         self.label.bind("<ButtonRelease-1>", self.stop_move)
         self.label.bind("<B1-Motion>", self.do_move)
+        
 
         self.label.bind("<Double-Button-1>", self.hide)  # Double-click to hide
-        self.window.bind("<KeyPress-s>", self.show)  # Click anywhere to show again
-
+        self.window.bind("<KeyPress-s>", self.show)  # Press s key to show again
+        self.window.bind("<Control-q>", self.quit) # Properly close program
+        
         # Start random events and movement
         self.update_random_event()
         self.move_randomly()
@@ -111,6 +123,11 @@ class Robby:
             self.window.wm_attributes('-transparentcolor', 'white')
             self.img_tk = ImageTk.PhotoImage(self.talkingimg[0])  # Set to idle
             self.label.config(image=self.img_tk)
+    
+    def quit(self, event="none"):
+        pygame.mixer.quit()
+        self.window.destroy() 
+
 
     def hide(self, event):
         """Change Robby into a folder icon without hiding the window."""
@@ -143,9 +160,9 @@ class Robby:
 
     def yap(self):
         """Play a random talking sound and stop talking when done."""
-        files = os.listdir("yappinglines")  # Get all sound files
+        files = os.listdir(resource_path("yappinglines"))  # Get all sound files
         filename = os.fsdecode(random.choice(files))  # Pick a random file
-        sent = pygame.mixer.Sound(f"yappinglines/{filename}")  # Load sound
+        sent = pygame.mixer.Sound(resource_path(f"yappinglines/{filename}"))  # Load sound
 
         sent.set_volume(2.0)  # Increase volume
         sent.play()  # Play sound
