@@ -5,7 +5,7 @@ a = Analysis(
     ['Parent.py'],
     pathex=[],
     binaries=[],
-    datas=[('images', 'images'), ('sounds', 'sounds'), ('yappinglines', 'yappinglines')],
+    datas=[('yappinglines', 'yappinglines'), ('images', 'images'), ('sounds', 'sounds')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
