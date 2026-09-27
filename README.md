@@ -10,7 +10,14 @@ Robby is an interactive and animated character created for Winter Wonder Hack 20
 - **Sound Effects**: Various sound effects are triggered based on Robby's actions, such as talking, transforming, and flying.
 - **Smooth Transitions**: Robby moves smoothly across the screen, creating a more polished and engaging user experience.
 
-## Installation
+## EXE Installation
+> [!WARNING] 
+> Program can only be stopped via Task Manager. Look for 'Parent.exe'
+
+Download raw EXE file here -> [Parent.exe](./dist/Parent.exe).
+
+
+## Dev Installation
 To run the project, you'll need Python 3.x and the following libraries:
 
 - `pygame`
@@ -21,3 +28,6 @@ To install the required libraries, you can use `pip`:
 
 ```bash
 pip install pygame Pillow
+```
+
+
